@@ -9,38 +9,272 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ZomatoRouteImport } from './routes/zomato'
+import { Route as ContactUsRouteImport } from './routes/contact-us'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as BecomeAVendorRouteImport } from './routes/become-a-vendor'
+import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StaysIndexRouteImport } from './routes/stays/index'
+import { Route as BookingsIndexRouteImport } from './routes/bookings/index'
+import { Route as StaysStayIdRouteImport } from './routes/stays/$stayId'
+import { Route as BookingsBookingIdRouteImport } from './routes/bookings/$bookingId'
+import { Route as userProfileRouteImport } from './routes/(user)/profile'
+import { Route as legalTermsAndConditionsRouteImport } from './routes/(legal)/terms-and-conditions'
+import { Route as legalRefundPolicyRouteImport } from './routes/(legal)/refund-policy'
+import { Route as legalPrivacyPolicyRouteImport } from './routes/(legal)/privacy-policy'
+import { Route as authRegisterRouteImport } from './routes/(auth)/register'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
 
+const ZomatoRoute = ZomatoRouteImport.update({
+  id: '/zomato',
+  path: '/zomato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactUsRoute = ContactUsRouteImport.update({
+  id: '/contact-us',
+  path: '/contact-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BecomeAVendorRoute = BecomeAVendorRouteImport.update({
+  id: '/become-a-vendor',
+  path: '/become-a-vendor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutUsRoute = AboutUsRouteImport.update({
+  id: '/about-us',
+  path: '/about-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaysIndexRoute = StaysIndexRouteImport.update({
+  id: '/stays/',
+  path: '/stays/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsIndexRoute = BookingsIndexRouteImport.update({
+  id: '/bookings/',
+  path: '/bookings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaysStayIdRoute = StaysStayIdRouteImport.update({
+  id: '/stays/$stayId',
+  path: '/stays/$stayId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsBookingIdRoute = BookingsBookingIdRouteImport.update({
+  id: '/bookings/$bookingId',
+  path: '/bookings/$bookingId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const userProfileRoute = userProfileRouteImport.update({
+  id: '/(user)/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const legalTermsAndConditionsRoute = legalTermsAndConditionsRouteImport.update({
+  id: '/(legal)/terms-and-conditions',
+  path: '/terms-and-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const legalRefundPolicyRoute = legalRefundPolicyRouteImport.update({
+  id: '/(legal)/refund-policy',
+  path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const legalPrivacyPolicyRoute = legalPrivacyPolicyRouteImport.update({
+  id: '/(legal)/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authRegisterRoute = authRegisterRouteImport.update({
+  id: '/(auth)/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about-us': typeof AboutUsRoute
+  '/become-a-vendor': typeof BecomeAVendorRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact-us': typeof ContactUsRoute
+  '/zomato': typeof ZomatoRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/privacy-policy': typeof legalPrivacyPolicyRoute
+  '/refund-policy': typeof legalRefundPolicyRoute
+  '/terms-and-conditions': typeof legalTermsAndConditionsRoute
+  '/profile': typeof userProfileRoute
+  '/bookings/$bookingId': typeof BookingsBookingIdRoute
+  '/stays/$stayId': typeof StaysStayIdRoute
+  '/bookings/': typeof BookingsIndexRoute
+  '/stays/': typeof StaysIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about-us': typeof AboutUsRoute
+  '/become-a-vendor': typeof BecomeAVendorRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact-us': typeof ContactUsRoute
+  '/zomato': typeof ZomatoRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/privacy-policy': typeof legalPrivacyPolicyRoute
+  '/refund-policy': typeof legalRefundPolicyRoute
+  '/terms-and-conditions': typeof legalTermsAndConditionsRoute
+  '/profile': typeof userProfileRoute
+  '/bookings/$bookingId': typeof BookingsBookingIdRoute
+  '/stays/$stayId': typeof StaysStayIdRoute
+  '/bookings': typeof BookingsIndexRoute
+  '/stays': typeof StaysIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about-us': typeof AboutUsRoute
+  '/become-a-vendor': typeof BecomeAVendorRoute
+  '/checkout': typeof CheckoutRoute
+  '/contact-us': typeof ContactUsRoute
+  '/zomato': typeof ZomatoRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/register': typeof authRegisterRoute
+  '/(legal)/privacy-policy': typeof legalPrivacyPolicyRoute
+  '/(legal)/refund-policy': typeof legalRefundPolicyRoute
+  '/(legal)/terms-and-conditions': typeof legalTermsAndConditionsRoute
+  '/(user)/profile': typeof userProfileRoute
+  '/bookings/$bookingId': typeof BookingsBookingIdRoute
+  '/stays/$stayId': typeof StaysStayIdRoute
+  '/bookings/': typeof BookingsIndexRoute
+  '/stays/': typeof StaysIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about-us'
+    | '/become-a-vendor'
+    | '/checkout'
+    | '/contact-us'
+    | '/zomato'
+    | '/login'
+    | '/register'
+    | '/privacy-policy'
+    | '/refund-policy'
+    | '/terms-and-conditions'
+    | '/profile'
+    | '/bookings/$bookingId'
+    | '/stays/$stayId'
+    | '/bookings/'
+    | '/stays/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about-us'
+    | '/become-a-vendor'
+    | '/checkout'
+    | '/contact-us'
+    | '/zomato'
+    | '/login'
+    | '/register'
+    | '/privacy-policy'
+    | '/refund-policy'
+    | '/terms-and-conditions'
+    | '/profile'
+    | '/bookings/$bookingId'
+    | '/stays/$stayId'
+    | '/bookings'
+    | '/stays'
+  id:
+    | '__root__'
+    | '/'
+    | '/about-us'
+    | '/become-a-vendor'
+    | '/checkout'
+    | '/contact-us'
+    | '/zomato'
+    | '/(auth)/login'
+    | '/(auth)/register'
+    | '/(legal)/privacy-policy'
+    | '/(legal)/refund-policy'
+    | '/(legal)/terms-and-conditions'
+    | '/(user)/profile'
+    | '/bookings/$bookingId'
+    | '/stays/$stayId'
+    | '/bookings/'
+    | '/stays/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutUsRoute: typeof AboutUsRoute
+  BecomeAVendorRoute: typeof BecomeAVendorRoute
+  CheckoutRoute: typeof CheckoutRoute
+  ContactUsRoute: typeof ContactUsRoute
+  ZomatoRoute: typeof ZomatoRoute
+  authLoginRoute: typeof authLoginRoute
+  authRegisterRoute: typeof authRegisterRoute
+  legalPrivacyPolicyRoute: typeof legalPrivacyPolicyRoute
+  legalRefundPolicyRoute: typeof legalRefundPolicyRoute
+  legalTermsAndConditionsRoute: typeof legalTermsAndConditionsRoute
+  userProfileRoute: typeof userProfileRoute
+  BookingsBookingIdRoute: typeof BookingsBookingIdRoute
+  StaysStayIdRoute: typeof StaysStayIdRoute
+  BookingsIndexRoute: typeof BookingsIndexRoute
+  StaysIndexRoute: typeof StaysIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/zomato': {
+      id: '/zomato'
+      path: '/zomato'
+      fullPath: '/zomato'
+      preLoaderRoute: typeof ZomatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-us': {
+      id: '/contact-us'
+      path: '/contact-us'
+      fullPath: '/contact-us'
+      preLoaderRoute: typeof ContactUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/become-a-vendor': {
+      id: '/become-a-vendor'
+      path: '/become-a-vendor'
+      fullPath: '/become-a-vendor'
+      preLoaderRoute: typeof BecomeAVendorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about-us': {
+      id: '/about-us'
+      path: '/about-us'
+      fullPath: '/about-us'
+      preLoaderRoute: typeof AboutUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +282,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stays/': {
+      id: '/stays/'
+      path: '/stays'
+      fullPath: '/stays/'
+      preLoaderRoute: typeof StaysIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings/': {
+      id: '/bookings/'
+      path: '/bookings'
+      fullPath: '/bookings/'
+      preLoaderRoute: typeof BookingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stays/$stayId': {
+      id: '/stays/$stayId'
+      path: '/stays/$stayId'
+      fullPath: '/stays/$stayId'
+      preLoaderRoute: typeof StaysStayIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings/$bookingId': {
+      id: '/bookings/$bookingId'
+      path: '/bookings/$bookingId'
+      fullPath: '/bookings/$bookingId'
+      preLoaderRoute: typeof BookingsBookingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(user)/profile': {
+      id: '/(user)/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof userProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(legal)/terms-and-conditions': {
+      id: '/(legal)/terms-and-conditions'
+      path: '/terms-and-conditions'
+      fullPath: '/terms-and-conditions'
+      preLoaderRoute: typeof legalTermsAndConditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(legal)/refund-policy': {
+      id: '/(legal)/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof legalRefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(legal)/privacy-policy': {
+      id: '/(legal)/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof legalPrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/register': {
+      id: '/(auth)/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof authRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutUsRoute: AboutUsRoute,
+  BecomeAVendorRoute: BecomeAVendorRoute,
+  CheckoutRoute: CheckoutRoute,
+  ContactUsRoute: ContactUsRoute,
+  ZomatoRoute: ZomatoRoute,
+  authLoginRoute: authLoginRoute,
+  authRegisterRoute: authRegisterRoute,
+  legalPrivacyPolicyRoute: legalPrivacyPolicyRoute,
+  legalRefundPolicyRoute: legalRefundPolicyRoute,
+  legalTermsAndConditionsRoute: legalTermsAndConditionsRoute,
+  userProfileRoute: userProfileRoute,
+  BookingsBookingIdRoute: BookingsBookingIdRoute,
+  StaysStayIdRoute: StaysStayIdRoute,
+  BookingsIndexRoute: BookingsIndexRoute,
+  StaysIndexRoute: StaysIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
