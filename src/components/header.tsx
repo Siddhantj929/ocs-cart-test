@@ -12,30 +12,31 @@ import {
     ItemDescription,
     ItemMedia,
     ItemTitle,
-    ItemActions
 } from "@/components/ui/item"
 import {
     Drawer,
     DrawerClose,
     DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "./ui/card"
+import { Card, CardContent, CardFooter } from "./ui/card"
 import { Link } from "@tanstack/react-router"
 import { Button } from "./ui/button"
-import { BriefcaseBusiness, FileClock, FileText, Heart, Home, Menu, Pencil, Plane, Ship, UserRound, X } from "lucide-react"
+import { BriefcaseBusiness, FileText, Heart, Home, Menu, Pencil, Plane, Ship, UserRound, X } from "lucide-react"
 import { ModeToggle } from "./mode-toggle"
 import { useTheme } from "./theme-provider"
 import { useEffect, useState } from "react"
 import CurrencySwitch from "./currency-switch"
+import SearchBar from "./search-bar"
+import BookableFilters from "./bookable-filters"
+import { cn } from "@/lib/utils"
 
-const Header = () => {
+const Header = ({ filterSheetSide = 'right' }: { filterSheetSide?: 'right' | 'bottom' }) => {
     const { theme } = useTheme()
     const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark")
+    const [animateSearch, setAnimateSearch] = useState(false)
 
     useEffect(() => {
         if (typeof window === "undefined") return
@@ -59,120 +60,152 @@ const Header = () => {
         }
     }, [theme])
 
+    useEffect(() => {
+        if (typeof window === "undefined") return
+
+        let rafId: number | null = null
+        let ticking = false
+
+        const handleScroll = () => {
+            if (!ticking) {
+                rafId = window.requestAnimationFrame(() => {
+                    setAnimateSearch(window.scrollY > 0)
+                    ticking = false
+                })
+                ticking = true
+            }
+        }
+
+        // Set initial state
+        setAnimateSearch(window.scrollY > 0)
+
+        window.addEventListener("scroll", handleScroll, { passive: true })
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll)
+            if (rafId !== null) {
+                window.cancelAnimationFrame(rafId)
+            }
+        }
+    }, [])
+
+    console.log("ANIMATE", animateSearch);
+
     const logoSrc = resolvedTheme === "dark"
         ? "/images/logo-white.svg"
         : "/images/logo-black.svg"
 
     return (
-        <header className="flex justify-between items-center p-4 xl:px-22 relative h-20">
-            <Link to="/">
-                <img className="h-8 lg:h-9" src={logoSrc} alt="OneClick Stays" />
-            </Link>
-            <NavigationMenu className="absolute left-1/2 top-1/2 -translate-1/2 hidden xl:flex">
-                <NavigationMenuList>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} h-auto rounded-full hover:cursor-pointer [&_svg:not([class*='size-'])]:size-4.5 px-6 py-3`}>
-                            <Link to="/stays" className="flex flex-row items-start gap-2" activeProps={{ className: "bg-muted/80" }}>
-                                <Home className="mt-0.5" />
-                                <div>
-                                    <h2 className="text-md">Luxury Stays</h2>
-                                    <p className="text-xs text-muted-foreground">Luxury vacation rentals</p>
-                                </div>
-                            </Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} h-auto rounded-full hover:cursor-pointer [&_svg:not([class*='size-'])]:size-4.5 px-6 py-3`}>
-                            <Link className="flex flex-row items-start gap-2" to="/" disabled activeProps={{ className: "bg-muted/80" }}>
-                                <Plane className="mt-0.5" />
-                                <div>
-                                    <h2 className="text-md">Private Charters</h2>
-                                    <p className="text-xs text-muted-foreground">Coming Soon</p>
-                                </div>
-                            </Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} h-auto rounded-full hover:cursor-pointer [&_svg:not([class*='size-'])]:size-4.5 px-6 py-3`}>
-                            <Link className="flex flex-row items-start gap-2" to="/" disabled activeProps={{ className: "bg-muted/80" }}>
-                                <Ship className="mt-0.5" />
-                                <div>
-                                    <h2 className="text-md">Cruise Ships</h2>
-                                    <p className="text-xs text-muted-foreground">Coming Soon</p>
-                                </div>
-                            </Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
-            </NavigationMenu>
-            <NavigationMenu>
-                <NavigationMenuList>
-                    <NavigationMenuItem className="hidden md:flex">
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                            <Link className="flex flex-row items-center gap-2" to="/become-a-vendor" activeProps={{ className: "bg-muted/80" }}><BriefcaseBusiness /> Become a Host</Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} mx-2 hover:cursor-pointer`}>
-                            <Button variant='outline' className="px-2.5" asChild>
-                                <Link to="/login" activeProps={{ className: "bg-muted/80" }}>
-                                    <UserRound data-icon="inline-start" />
-                                    Login
+        <header className={cn("sticky top-0 z-50 transition-all duration-200 ease-in-out bg-background h-48 border-b", animateSearch && "h-22")}>
+            <div className="flex justify-between items-center p-4 xl:px-22 relative h-20">
+                <Link to="/">
+                    <img className="h-8 lg:h-9" src={logoSrc} alt="OneClick Stays" />
+                </Link>
+                <NavigationMenu className={cn("absolute left-1/2 top-1/2 -translate-1/2 hidden xl:flex transition-all duration-100 ease-in-out", animateSearch && "opacity-0")}>
+                    <NavigationMenuList>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} h-auto rounded-full hover:cursor-pointer [&_svg:not([class*='size-'])]:size-4.5 px-6 py-3`}>
+                                <Link to="/stays" className="flex flex-row items-start gap-2" activeProps={{ className: "bg-muted/80" }}>
+                                    <Home className="mt-0.5" />
+                                    <div>
+                                        <h2 className="text-md">Luxury Stays</h2>
+                                        <p className="text-xs text-muted-foreground">Luxury vacation rentals</p>
+                                    </div>
                                 </Link>
-                            </Button>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem className="hidden md:flex">
-                        <NavigationMenuLink className={`${navigationMenuTriggerStyle()} px-0 mr-2 hover:cursor-pointer`}>
-                            <CurrencySwitch />
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem className="hidden md:flex">
-                        <NavigationMenuLink className={`${navigationMenuTriggerStyle()} px-0 mx-0 hover:cursor-pointer`}>
-                            <ModeToggle />
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem className="flex md:hidden">
-                        <NavigationMenuLink className={`${navigationMenuTriggerStyle()} px-0 mx-0 hover:cursor-pointer`}>
-                            <Drawer direction="right">
-                                <DrawerTrigger asChild>
-                                    <Button variant='outline' size='icon'><Menu /></Button>
-                                </DrawerTrigger>
-                                <DrawerContent>
-                                    <DrawerHeader className="flex-row justify-between items-center">
-                                        <DrawerTitle className="flex items-center gap-2">
-                                            {/* <Link to="/">
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} h-auto rounded-full hover:cursor-pointer [&_svg:not([class*='size-'])]:size-4.5 px-6 py-3`}>
+                                <Link className="flex flex-row items-start gap-2" to="/" disabled activeProps={{ className: "bg-muted/80" }}>
+                                    <Plane className="mt-0.5" />
+                                    <div>
+                                        <h2 className="text-md">Private Charters</h2>
+                                        <p className="text-xs text-muted-foreground">Coming Soon</p>
+                                    </div>
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} h-auto rounded-full hover:cursor-pointer [&_svg:not([class*='size-'])]:size-4.5 px-6 py-3`}>
+                                <Link className="flex flex-row items-start gap-2" to="/" disabled activeProps={{ className: "bg-muted/80" }}>
+                                    <Ship className="mt-0.5" />
+                                    <div>
+                                        <h2 className="text-md">Cruise Ships</h2>
+                                        <p className="text-xs text-muted-foreground">Coming Soon</p>
+                                    </div>
+                                </Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </NavigationMenuList>
+                </NavigationMenu>
+                <NavigationMenu>
+                    <NavigationMenuList>
+                        <NavigationMenuItem className={cn("hidden md:flex transition-all duration-100 ease-in-out", animateSearch && "opacity-0")}>
+                            <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                                <Link className="flex flex-row items-center gap-2" to="/become-a-vendor" activeProps={{ className: "bg-muted/80" }}><BriefcaseBusiness /> Become a Host</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} mx-2 hover:cursor-pointer`}>
+                                <Button variant='outline' className="px-2.5" asChild>
+                                    <Link to="/login" activeProps={{ className: "bg-muted/80" }}>
+                                        <UserRound data-icon="inline-start" />
+                                        Login
+                                    </Link>
+                                </Button>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem className="hidden md:flex">
+                            <NavigationMenuLink className={`${navigationMenuTriggerStyle()} px-0 mr-2 hover:cursor-pointer`}>
+                                <CurrencySwitch />
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem className="hidden md:flex">
+                            <NavigationMenuLink className={`${navigationMenuTriggerStyle()} px-0 mx-0 hover:cursor-pointer`}>
+                                <ModeToggle />
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem className="flex md:hidden">
+                            <NavigationMenuLink className={`${navigationMenuTriggerStyle()} px-0 mx-0 hover:cursor-pointer`}>
+                                <Drawer direction="right">
+                                    <DrawerTrigger asChild>
+                                        <Button variant='outline' size='icon'><Menu /></Button>
+                                    </DrawerTrigger>
+                                    <DrawerContent>
+                                        <DrawerHeader className="flex-row justify-between items-center">
+                                            <DrawerTitle className="flex items-center gap-2">
+                                                {/* <Link to="/">
                                                 <img className="h-6" src={logoSrc} alt="OneClick Stays" />
                                             </Link> */}
-                                            <CurrencySwitch />
-                                            <ModeToggle />
-                                        </DrawerTitle>
+                                                <CurrencySwitch />
+                                                <ModeToggle />
+                                            </DrawerTitle>
 
-                                        <DrawerClose>
-                                            <Button variant='secondary' size='icon' className="p-0 m-0 bg-muted/35"><X /></Button>
-                                        </DrawerClose>
-                                    </DrawerHeader>
-                                    <div className="flex flex-col gap-2 px-4">
-                                        <Card className="p-1 mt-1 bg-card">
-                                            {/* <CardHeader className="px-2 py-2 mb-0">
+                                            <DrawerClose>
+                                                <Button variant='secondary' size='icon' className="p-0 m-0 bg-muted/35"><X /></Button>
+                                            </DrawerClose>
+                                        </DrawerHeader>
+                                        <div className="flex flex-col gap-2 px-4">
+                                            <Card className="p-1 mt-1 bg-card">
+                                                {/* <CardHeader className="px-2 py-2 mb-0">
                                                 <CardTitle className="text-sm">Login to your account</CardTitle>
                                                 <CardDescription className="text-xs/normal">
                                                     Enter your email below to login to your account
                                                 </CardDescription>
                                             </CardHeader> */}
-                                            <CardContent className="p-0 mt-1">
-                                                <Item className="py-0 px-1.5 gap-2">
-                                                    <ItemMedia>
-                                                        <Avatar className="size-10">
-                                                            <AvatarImage src="https://github.com/evilrabbit.png" />
-                                                            <AvatarFallback>ER</AvatarFallback>
-                                                        </Avatar>
-                                                    </ItemMedia>
-                                                    <ItemContent className="gap-0.5">
-                                                        <ItemTitle>Evil Rabbit</ItemTitle>
-                                                        <ItemDescription className="text-xs max-w-40 truncate">Last seen 5 months ago hello world</ItemDescription>
-                                                    </ItemContent>
-                                                    {/* <ItemActions>
+                                                <CardContent className="p-0 mt-1">
+                                                    <Item className="py-0 px-1.5 gap-2">
+                                                        <ItemMedia>
+                                                            <Avatar className="size-10">
+                                                                <AvatarImage src="https://github.com/evilrabbit.png" />
+                                                                <AvatarFallback>ER</AvatarFallback>
+                                                            </Avatar>
+                                                        </ItemMedia>
+                                                        <ItemContent className="gap-0.5">
+                                                            <ItemTitle>Evil Rabbit</ItemTitle>
+                                                            <ItemDescription className="text-xs max-w-40 truncate">Last seen 5 months ago hello world</ItemDescription>
+                                                        </ItemContent>
+                                                        {/* <ItemActions>
                                                         <Button
                                                             size="icon-xs"
                                                             variant="outline"
@@ -182,67 +215,73 @@ const Header = () => {
                                                             <Pencil />
                                                         </Button>
                                                     </ItemActions> */}
-                                                </Item>
-                                                <Link to="/" className="flex flex-row items-start gap-2 p-2 mt-3 border-t border-muted" activeProps={{ className: "bg-muted mb-1.5 rounded-md" }}>
-                                                    <Pencil className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
+                                                    </Item>
+                                                    <Link to="/" className="flex flex-row items-start gap-2 p-2 mt-3 border-t border-muted" activeProps={{ className: "bg-muted mb-1.5 rounded-md" }}>
+                                                        <Pencil className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
+                                                        <div>
+                                                            <h2 className="text-md">Edit Profile</h2>
+                                                        </div>
+                                                    </Link>
+                                                    <Link to="/" className="flex flex-row items-start gap-2 p-2 border-t border-muted" activeProps={{ className: "bg-muted mb-1.5 rounded-md" }}>
+                                                        <FileText className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
+                                                        <div>
+                                                            <h2 className="text-md">My Bookings</h2>
+                                                        </div>
+                                                    </Link>
+                                                    <Link to="/" className="flex flex-row items-start gap-2 p-2 border-t border-muted" activeProps={{ className: "bg-muted mb-1.5 rounded-md" }}>
+                                                        <Heart className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
+                                                        <div>
+                                                            <h2 className="text-md">My Favorites</h2>
+                                                        </div>
+                                                    </Link>
+                                                </CardContent>
+                                                <CardFooter className="flex-col gap-2 p-1 pt-0 -mt-3">
+                                                    <Button type="submit" variant='outline' className="w-full">
+                                                        Logout
+                                                    </Button>
+                                                </CardFooter>
+                                            </Card>
+                                            <div className="flex flex-col gap-0 mt-3">
+                                                <Link to="/about-us" className="flex flex-row items-start gap-2 p-2 rounded-md" activeProps={{ className: "bg-muted/25" }}>
+                                                    <Home className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
                                                     <div>
-                                                        <h2 className="text-md">Edit Profile</h2>
+                                                        <h2 className="text-md">Luxury Stays</h2>
+                                                        {/* <p className="text-xs text-muted-foreground">Luxury vacation rentals</p> */}
                                                     </div>
                                                 </Link>
-                                                <Link to="/" className="flex flex-row items-start gap-2 p-2 border-t border-muted" activeProps={{ className: "bg-muted mb-1.5 rounded-md" }}>
-                                                    <FileText className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
+                                                <Link to="/" className="flex flex-row items-start gap-2 p-2 rounded-md" activeProps={{ className: "bg-muted/60" }}>
+                                                    <Plane className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
                                                     <div>
-                                                        <h2 className="text-md">My Bookings</h2>
+                                                        <h2 className="text-md"><span className="opacity-50">Private Charters</span> <span className="text-[0.6rem] uppercase tracking-wider font-medium ml-1">Coming Soon</span></h2>
+                                                        {/* <p className="text-xs text-muted-foreground">Coming Soon</p> */}
                                                     </div>
                                                 </Link>
-                                                <Link to="/" className="flex flex-row items-start gap-2 p-2 border-t border-muted" activeProps={{ className: "bg-muted mb-1.5 rounded-md" }}>
-                                                    <Heart className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
+                                                <Link to="/" className="flex flex-row items-start gap-2 p-2 rounded-md" activeProps={{ className: "bg-muted/60" }}>
+                                                    <Ship className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
                                                     <div>
-                                                        <h2 className="text-md">My Favorites</h2>
+                                                        <h2 className="text-md"><span className="opacity-50">Cruise Ships</span> <span className="text-[0.6rem] uppercase tracking-wider font-medium ml-1">Coming Soon</span></h2>
+                                                        {/* <p className="text-xs text-muted-foreground">Coming Soon</p> */}
                                                     </div>
                                                 </Link>
-                                            </CardContent>
-                                            <CardFooter className="flex-col gap-2 p-1 pt-0 -mt-3">
-                                                <Button type="submit" variant='outline' className="w-full">
-                                                    Logout
-                                                </Button>
-                                            </CardFooter>
-                                        </Card>
-                                        <div className="flex flex-col gap-0 mt-3">
-                                            <Link to="/about-us" className="flex flex-row items-start gap-2 p-2 rounded-md" activeProps={{ className: "bg-muted/25" }}>
-                                                <Home className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
-                                                <div>
-                                                    <h2 className="text-md">Luxury Stays</h2>
-                                                    {/* <p className="text-xs text-muted-foreground">Luxury vacation rentals</p> */}
-                                                </div>
-                                            </Link>
-                                            <Link to="/" className="flex flex-row items-start gap-2 p-2 rounded-md" activeProps={{ className: "bg-muted/60" }}>
-                                                <Plane className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
-                                                <div>
-                                                    <h2 className="text-md"><span className="opacity-50">Private Charters</span> <span className="text-[0.6rem] uppercase tracking-wider font-medium ml-1">Coming Soon</span></h2>
-                                                    {/* <p className="text-xs text-muted-foreground">Coming Soon</p> */}
-                                                </div>
-                                            </Link>
-                                            <Link to="/" className="flex flex-row items-start gap-2 p-2 rounded-md" activeProps={{ className: "bg-muted/60" }}>
-                                                <Ship className="mt-0.5 text-muted-foreground" size={16} strokeWidth={1.25} />
-                                                <div>
-                                                    <h2 className="text-md"><span className="opacity-50">Cruise Ships</span> <span className="text-[0.6rem] uppercase tracking-wider font-medium ml-1">Coming Soon</span></h2>
-                                                    {/* <p className="text-xs text-muted-foreground">Coming Soon</p> */}
-                                                </div>
-                                            </Link>
+                                            </div>
+                                            <hr />
+                                            <div className="flex flex-col gap-2.5 px-2 mt-1.5">
+                                                {/* <p className="text-muted-foreground text-xs/normal">Want to promote your stays with us?</p> */}
+                                                <Link className="flex flex-row items-center gap-2" to="/become-a-vendor" activeProps={{ className: "bg-muted/80" }}><BriefcaseBusiness className="text-muted-foreground" strokeWidth={1.25} size={16} /> Become a Host</Link>
+                                            </div>
                                         </div>
-                                        <hr />
-                                        <div className="flex flex-col gap-2.5 px-2 mt-1.5">
-                                            {/* <p className="text-muted-foreground text-xs/normal">Want to promote your stays with us?</p> */}
-                                            <Link className="flex flex-row items-center gap-2" to="/become-a-vendor" activeProps={{ className: "bg-muted/80" }}><BriefcaseBusiness className="text-muted-foreground" strokeWidth={1.25} size={16} /> Become a Host</Link>
-                                        </div>
-                                    </div>
-                                </DrawerContent>
-                            </Drawer>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
-                </NavigationMenuList>
-            </NavigationMenu>
+                                    </DrawerContent>
+                                </Drawer>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </NavigationMenuList>
+                </NavigationMenu>
+            </div>
+            <div className={cn("py-4 flex justify-center items-center gap-2 absolute top-20 left-0 right-0 transition-all duration-200 ease-in-out", animateSearch && "top-0")}>
+                <SearchBar shrink={animateSearch} className={cn("-mr-22", animateSearch && "-mr-0")} />
+                {/* {animateSearch && <BookableFilters side={filterSheetSide} />} */}
+                <BookableFilters side={filterSheetSide} triggerClassName={cn("opacity-0 scale-0", animateSearch && "opacity-100 scale-100")} />
+            </div>
         </header>
     )
 }

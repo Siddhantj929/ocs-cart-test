@@ -1,16 +1,12 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import PageTitle from '@/components/page-title'
-import SearchBar from '@/components/search-bar'
 import { createFileRoute } from '@tanstack/react-router'
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import { useRef, useMemo, useState, useEffect } from 'react'
-// Assuming you have a PropertyCard component
-import BookableCard from '@/components/bookable-card' // Adjust path as needed
-// Assuming data from useInfiniteQuery (example below; replace with your actual data fetching)
+import BookableCard from '@/components/bookable-card'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Skeleton } from '@/components/ui/skeleton'
-import BookableFilters from '@/components/bookable-filters'
 
 export const Route = createFileRoute('/stays/')({
   component: RouteComponent,
@@ -115,14 +111,10 @@ function RouteComponent() {
 
   return (
     <>
-      <Header />
+      <Header filterSheetSide={numColumns > 2 ? 'right' : 'bottom'} />
       <div className="px-4 pt-12 pb-16 lg:px-22">
         <PageTitle className="mb-3">Lowest Prices. <br className="sm:hidden" /> Guaranteed.</PageTitle>
-        <p className="text-muted-foreground sm:max-w-[65ch] mx-auto text-center mb-3">Find the perfect stay for every occassion.</p>
-        <div className="py-4 bg-background sticky top-0 z-50 flex justify-center items-center gap-2">
-          <SearchBar />
-          <BookableFilters side={numColumns > 2 ? 'right' : 'bottom'} />
-        </div>
+        <p className="text-muted-foreground sm:max-w-[65ch] mx-auto text-center mb-4">Find the perfect stay for every occassion.</p>
         <div ref={parentRef} className="relative w-full" style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
           {rowVirtualizer.getVirtualItems().map((virtualRow) => (
             <div

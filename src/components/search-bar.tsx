@@ -22,9 +22,10 @@ interface SearchSectionProps {
     popoverContentClassName?: string
     onPopoverClose?: () => void
     popoverOpen?: boolean
+    shrink?: boolean
 }
 
-const SearchSection = memo(({ className, active = false, onClick, children, popoverContent, popoverContentClassName, onPopoverClose, popoverOpen }: SearchSectionProps) => {
+const SearchSection = memo(({ className, active = false, onClick, children, popoverContent, popoverContentClassName, onPopoverClose, popoverOpen, shrink }: SearchSectionProps) => {
     if (popoverContent) {
         return (
             <Popover open={popoverOpen} onOpenChange={(open) => {
@@ -35,9 +36,10 @@ const SearchSection = memo(({ className, active = false, onClick, children, popo
                 <PopoverTrigger asChild>
                     <div
                         className={cn(
-                            "w-64 h-16 rounded-full flex flex-col justify-center items-start p-8 bg-background hover:bg-muted cursor-pointer transition-all ease-out duration-100 relative z-10",
+                            "w-64 h-16 rounded-full flex flex-col justify-center items-start p-8 bg-background hover:bg-muted cursor-pointer transition-all ease-out duration-200 relative z-10",
                             active && "bg-transparent hover:bg-transparent",
-                            className
+                            className,
+                            shrink && "w-40 h-12 p-4"
                         )}
                         onClick={onClick}
                     >
@@ -54,7 +56,7 @@ const SearchSection = memo(({ className, active = false, onClick, children, popo
     return (
         <div
             className={cn(
-                "w-64 h-16 rounded-full flex flex-col justify-center items-start p-8 bg-background hover:bg-muted cursor-pointer transition-all ease-out duration-100 relative z-10",
+                "w-64 h-16 rounded-full flex flex-col justify-center items-start p-8 bg-background hover:bg-muted cursor-pointer transition-all ease-out duration-200 relative z-10",
                 active && "bg-transparent hover:bg-transparent",
                 className
             )}
@@ -67,7 +69,7 @@ const SearchSection = memo(({ className, active = false, onClick, children, popo
 
 SearchSection.displayName = "SearchSection"
 
-const SearchBar = () => {
+const SearchBar = ({ shrink = false, className }: { shrink?: boolean, className?: string }) => {
     const [activeSection, setActiveSection] = useState<"location" | "dates" | "guests" | null>(null)
     const [date, setDate] = useState<DateRange | undefined>(undefined)
     const locationInputRef = useRef<HTMLInputElement>(null)
@@ -119,8 +121,9 @@ const SearchBar = () => {
 
     return (
         <div className={cn(
-            "flex w-fit justify-center items-center shadow-xs bg-background rounded-full border transition-all ease-out duration-100 group/container relative",
-            isSearchBarActive && "bg-muted"
+            "flex w-fit justify-center items-center shadow-xs bg-background rounded-full border transition-all ease-out duration-200 group/container relative",
+            isSearchBarActive && "bg-muted",
+            className
         )}>
             <div
                 key="animated-background"
@@ -133,6 +136,7 @@ const SearchBar = () => {
                 )}
             />
             <SearchSection
+                shrink={shrink}
                 className="location"
                 active={isSearchBarActive}
                 onClick={handleLocationClick}
@@ -145,11 +149,12 @@ const SearchBar = () => {
                     }
                 }}
             >
-                <h3 className="text-xs text-muted-foreground mb-0.5">Where</h3>
-                <Input ref={locationInputRef} className="text-sm p-0 m-0 bg-transparent dark:bg-transparent border-0 rounded-none focus-visible:border-0 focus-visible:ring-0 shadow-none max-w-5/6" placeholder="Nearby" />
+                {!shrink && <h3 className="text-xs text-muted-foreground mb-0.5">Where</h3>}
+                <Input ref={locationInputRef} className="text-sm p-0 m-0 bg-transparent dark:bg-transparent border-0 rounded-none focus-visible:border-0 focus-visible:ring-0 shadow-none max-w-5/6" placeholder="Add Location" />
             </SearchSection>
-            <Separator className={cn("self-center h-10 mt-3 group-has-[.location:hover:not(.bg-transparent)]/container:invisible group-has-[.dates:hover:not(.bg-transparent)]/container:invisible", (activeSection === "location" || activeSection === "dates") && "hidden")} orientation="vertical" />
+            <Separator className={cn("self-center h-10 mt-3 group-has-[.location:hover:not(.bg-transparent)]/container:invisible group-has-[.dates:hover:not(.bg-transparent)]/container:invisible", (activeSection === "location" || activeSection === "dates") && "hidden", shrink && "mt-2.5 h-7")} orientation="vertical" />
             <SearchSection
+                shrink={shrink}
                 className="dates"
                 active={isSearchBarActive}
                 onClick={handleDatesClick}
@@ -171,22 +176,27 @@ const SearchBar = () => {
                     }
                 }}
             >
-                <h3 className="text-xs text-muted-foreground mb-0.5">When</h3>
-                <p className="text-sm p-0 m-0">{date?.from ? (
-                    date.to ? (
-                        <>
-                            {format(date.from, "LLL dd")} -{" "}
-                            {format(date.to, "LLL dd")}
-                        </>
-                    ) : (
-                        format(date.from, "LLL dd")
-                    )
-                ) : (
-                    "Pick a date"
-                )}</p>
+                {!shrink && <h3 className="text-xs text-muted-foreground mb-0.5">When</h3>}
+                <p className="text-sm p-0 m-0">
+                    {
+                        date?.from ? (
+                            date.to ? (
+                                <>
+                                    {format(date.from, "LLL dd")} -{" "}
+                                    {format(date.to, "LLL dd")}
+                                </>
+                            ) : (
+                                format(date.from, "LLL dd")
+                            )
+                        ) : (
+                            "Pick a date"
+                        )
+                    }
+                </p>
             </SearchSection>
-            <Separator className={cn("self-center h-10 mt-3 group-has-[.dates:hover:not(.bg-transparent)]/container:invisible group-has-[.guests:hover:not(.bg-transparent)]/container:invisible", (activeSection === "guests" || activeSection === "dates") && "hidden")} orientation="vertical" />
+            <Separator className={cn("self-center h-10 mt-3 group-has-[.dates:hover:not(.bg-transparent)]/container:invisible group-has-[.guests:hover:not(.bg-transparent)]/container:invisible", (activeSection === "guests" || activeSection === "dates") && "hidden", shrink && "mt-2.5 h-7")} orientation="vertical" />
             <SearchSection
+                shrink={shrink}
                 className="guests"
                 active={isSearchBarActive}
                 onClick={handleGuestsClick}
@@ -199,10 +209,10 @@ const SearchBar = () => {
                     }
                 }}
             >
-                <h3 className="text-xs text-muted-foreground mb-0.5">Who</h3>
+                {!shrink && <h3 className="text-xs text-muted-foreground mb-0.5">Who</h3>}
                 <p className="text-sm p-0 m-0">Add guests</p>
             </SearchSection>
-            <Button className={cn("h-13 w-13 rounded-full absolute right-2 z-20 cursor-pointer transition-all duration-200 ease-in-out", isSearchBarActive && "w-24")} size='icon-lg' >
+            <Button className={cn("h-13 w-13 rounded-full absolute right-2 z-20 cursor-pointer transition-all duration-200 ease-in-out", isSearchBarActive && "w-24", shrink && "h-11 w-11 right-0.5")} size='icon-lg' >
                 <Search />
                 {isSearchBarActive && <span className="inline-block ml-1.5">Search</span>}
             </Button>

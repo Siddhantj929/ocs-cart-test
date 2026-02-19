@@ -1,25 +1,24 @@
 import { SlidersHorizontal } from 'lucide-react';
 import {
     Sheet,
-    SheetClose,
     SheetContent,
     SheetDescription,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { cn } from '@/lib/utils';
 
-const BookableFilters = ({ side = 'right', className }: { side?: 'right' | 'bottom', className?: string }) => {
+const BookableFilters = ({ side = 'right', triggerClassName, contentClassName }: { side?: 'right' | 'bottom', triggerClassName?: string, contentClassName?: string }) => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <div className='shadow-xs py-8 px-6 h-16 rounded-full border inline-flex gap-2 items-center cursor-pointer bg-background hover:bg-muted'>
+                <div className={cn('shadow-xs p-4 h-12 rounded-full border inline-flex gap-2 items-center cursor-pointer bg-background hover:bg-muted transition-all duration-200 ease-in-out', triggerClassName)}>
                     <SlidersHorizontal size={16} />
                     Filters
                 </div>
             </SheetTrigger>
-            <SheetContent side={side} className={className}>
+            <SheetContent side={side} className={contentClassName}>
                 <SheetHeader className='gap-0'>
                     <SheetTitle>Add Filters</SheetTitle>
                     <SheetDescription>Customise your search</SheetDescription>
