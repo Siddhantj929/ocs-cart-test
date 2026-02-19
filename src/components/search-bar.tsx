@@ -119,7 +119,7 @@ const SearchBar = () => {
 
     return (
         <div className={cn(
-            "flex w-fit mx-auto justify-center items-center shadow-xs bg-background rounded-full border transition-all ease-out duration-100 group/container relative",
+            "flex w-fit justify-center items-center shadow-xs bg-background rounded-full border transition-all ease-out duration-100 group/container relative",
             isSearchBarActive && "bg-muted"
         )}>
             <div
@@ -148,7 +148,7 @@ const SearchBar = () => {
                 <h3 className="text-xs text-muted-foreground mb-0.5">Where</h3>
                 <Input ref={locationInputRef} className="text-sm p-0 m-0 bg-transparent dark:bg-transparent border-0 rounded-none focus-visible:border-0 focus-visible:ring-0 shadow-none max-w-5/6" placeholder="Nearby" />
             </SearchSection>
-            <Separator className={cn("self-center h-10 mt-3 group-has-[.location:hover:not(.bg-transparent)]/container:hidden group-has-[.dates:hover:not(.bg-transparent)]/container:hidden", (activeSection === "location" || activeSection === "dates") && "hidden")} orientation="vertical" />
+            <Separator className={cn("self-center h-10 mt-3 group-has-[.location:hover:not(.bg-transparent)]/container:invisible group-has-[.dates:hover:not(.bg-transparent)]/container:invisible", (activeSection === "location" || activeSection === "dates") && "hidden")} orientation="vertical" />
             <SearchSection
                 className="dates"
                 active={isSearchBarActive}
@@ -185,7 +185,7 @@ const SearchBar = () => {
                     "Pick a date"
                 )}</p>
             </SearchSection>
-            <Separator className={cn("self-center h-10 mt-3 group-has-[.dates:hover:not(.bg-transparent)]/container:hidden group-has-[.guests:hover:not(.bg-transparent)]/container:hidden", (activeSection === "guests" || activeSection === "dates") && "hidden")} orientation="vertical" />
+            <Separator className={cn("self-center h-10 mt-3 group-has-[.dates:hover:not(.bg-transparent)]/container:invisible group-has-[.guests:hover:not(.bg-transparent)]/container:invisible", (activeSection === "guests" || activeSection === "dates") && "hidden")} orientation="vertical" />
             <SearchSection
                 className="guests"
                 active={isSearchBarActive}
