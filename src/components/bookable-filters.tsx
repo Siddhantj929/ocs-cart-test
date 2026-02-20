@@ -13,7 +13,7 @@ const BookableFilters = ({ side = 'right', triggerClassName, contentClassName }:
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <div className={cn('shadow-xs p-4 h-12 rounded-full border inline-flex gap-2 items-center cursor-pointer bg-background hover:bg-muted transition-all duration-200 ease-in-out', triggerClassName)}>
+                <div className={cn('shadow-xs p-4 h-12 rounded-full border inline-flex gap-2 items-center cursor-pointer bg-background dark:bg-input/30 dark:hover:bg-muted hover:bg-muted transition-all duration-200 ease-in-out', triggerClassName)}>
                     <SlidersHorizontal size={16} />
                     Filters
                 </div>

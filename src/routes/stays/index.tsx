@@ -86,9 +86,10 @@ function RouteComponent() {
   const rowVirtualizer = useWindowVirtualizer({
     count: rows.length,
     // getScrollElement: () => document.documentElement,
-    estimateSize: () => 300, // Rough estimate; actual measured if using measureElement
-    overscan: 0,
-    scrollMargin,
+    estimateSize: () => 500, // Rough estimate; actual measured if using measureElement
+    overscan: 1,
+    paddingEnd: 16,
+    // scrollMargin,
     gap: 16
     // For dynamic row heights (recommended if card content varies)
     // measureElement: (el) => el.getBoundingClientRect().height,
@@ -101,7 +102,7 @@ function RouteComponent() {
     if (!lastVirtualRow) return
 
     if (
-      lastVirtualRow.index >= rows.length - numColumns && // Adjust threshold as needed
+      lastVirtualRow.index >= rows.length - (numColumns % 5) && // Adjust threshold as needed
       hasNextPage &&
       !isFetchingNextPage
     ) {
@@ -114,7 +115,7 @@ function RouteComponent() {
       <Header filterSheetSide={numColumns > 2 ? 'right' : 'bottom'} />
       <div className="px-4 pt-12 pb-16 lg:px-22">
         <PageTitle className="mb-3">Lowest Prices. <br className="sm:hidden" /> Guaranteed.</PageTitle>
-        <p className="text-muted-foreground sm:max-w-[65ch] mx-auto text-center mb-4">Find the perfect stay for every occassion.</p>
+        <p className="text-muted-foreground sm:max-w-[65ch] mx-auto text-center mb-12">Find the perfect stay for every occassion.</p>
         <div ref={parentRef} className="relative w-full" style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
           {rowVirtualizer.getVirtualItems().map((virtualRow) => (
             <div
@@ -122,7 +123,7 @@ function RouteComponent() {
               className="absolute top-0 left-0 w-full"
               style={{
                 height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start - virtualRow.size}px)`,
+                transform: `translateY(${virtualRow.start}px)`,
               }}
             >
               <div className="grid h-full grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4">
@@ -133,8 +134,8 @@ function RouteComponent() {
             </div>
           ))}
         </div>
-        {(isFetching || isFetchingNextPage) && <div className="mt-8 grid h-full grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4">
-          {new Array(numColumns * 4).fill(0).map((_) => <Skeleton key={Math.random()} className='h-[300px] w-full' />)}
+        {(isFetching || isFetchingNextPage) && <div className="grid h-full grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4">
+          {new Array(numColumns * 4).fill(0).map((_) => <Skeleton key={Math.random()} className='h-[500px] w-full' />)}
         </div>}
       </div>
       <Footer />

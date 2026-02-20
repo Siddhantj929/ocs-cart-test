@@ -277,8 +277,8 @@ const Header = ({ filterSheetSide = 'right' }: { filterSheetSide?: 'right' | 'bo
                     </NavigationMenuList>
                 </NavigationMenu>
             </div>
-            <div className={cn("py-4 flex justify-center items-center gap-2 absolute top-20 left-0 right-0 transition-all duration-200 ease-in-out", animateSearch && "top-0")}>
-                <SearchBar shrink={animateSearch} className={cn("-mr-22", animateSearch && "-mr-0")} />
+            <div className={cn("py-4 flex justify-center items-center gap-2 absolute top-20 left-1/2 -translate-x-1/2 transition-all duration-200 ease-in-out", animateSearch && "top-0")}>
+                <SearchBar shrink={animateSearch} className={cn("-mr-22", animateSearch && "mr-0")} onOpen={() => setAnimateSearch(false)} onClose={() => setAnimateSearch(true)} />
                 {/* {animateSearch && <BookableFilters side={filterSheetSide} />} */}
                 <BookableFilters side={filterSheetSide} triggerClassName={cn("opacity-0 scale-0", animateSearch && "opacity-100 scale-100")} />
             </div>
