@@ -7,6 +7,7 @@ import { useRef, useMemo, useState, useEffect } from 'react'
 import BookableCard from '@/components/bookable-card'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Skeleton } from '@/components/ui/skeleton'
+import useBreakpoint from '@/hooks/useBreakpoint'
 
 export const Route = createFileRoute('/stays/')({
   component: RouteComponent,
@@ -23,26 +24,24 @@ function chunk<T>(array: T[], size: number): T[][] {
 
 // Hook to detect responsive columns matching Tailwind breakpoints
 function useNumColumns() {
-  const [numColumns, setNumColumns] = useState(4)
+  const breakpoint = useBreakpoint()
 
-  useEffect(() => {
-    const updateColumns = () => {
-      const width = window.innerWidth
-      if (width < 640) {
-        setNumColumns(1)
-      } else if (width < 768) {
-        setNumColumns(2)
-      } else if (width < 1024) {
-        setNumColumns(3)
-      } else {
-        setNumColumns(4)
-      }
+  const numColumns = useMemo(() => {
+    switch (breakpoint) {
+      case 'xs':
+        return 1
+      case 'sm':
+        return 2
+      case 'md':
+        return 3
+      case 'lg':
+      case 'xl':
+      case '2xl':
+        return 4
+      default:
+        return 4
     }
-
-    updateColumns()
-    window.addEventListener('resize', updateColumns)
-    return () => window.removeEventListener('resize', updateColumns)
-  }, [])
+  }, [breakpoint])
 
   return numColumns
 }

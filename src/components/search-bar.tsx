@@ -210,7 +210,7 @@ const SearchBar = ({
                 onPopoverClose={() => handlePopoverClose('location')}
             >
                 {!shrink && (
-                    <h3 className="text-xs text-muted-foreground mb-0.5">Where</h3>
+                    <h3 className="text-xs text-muted-foreground mb-0.5 hidden md:block">Where</h3>
                 )}
                 <Input
                     ref={locationInputRef}
@@ -247,7 +247,7 @@ const SearchBar = ({
                 onPopoverClose={() => handlePopoverClose('dates')}
             >
                 {!shrink && (
-                    <h3 className="text-xs text-muted-foreground mb-0.5">When</h3>
+                    <h3 className="text-xs text-muted-foreground mb-0.5 hidden md:block">When</h3>
                 )}
                 <p className="text-sm p-0 m-0">
                     {date?.from ? (
@@ -282,7 +282,7 @@ const SearchBar = ({
                 onPopoverClose={() => handlePopoverClose('guests')}
             >
                 {!shrink && (
-                    <h3 className="text-xs text-muted-foreground mb-0.5">Who</h3>
+                    <h3 className="text-xs text-muted-foreground mb-0.5 hidden md:block">Who</h3>
                 )}
                 <p className="text-sm p-0 m-0">Add guests</p>
             </SearchSection>
