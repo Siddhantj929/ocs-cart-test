@@ -29,11 +29,12 @@ import { ModeToggle } from "./mode-toggle"
 import { useTheme } from "./theme-provider"
 import { useEffect, useState } from "react"
 import CurrencySwitch from "./currency-switch"
-import SearchBar from "./search-bar"
+import SearchBarDesktop from "./search-bar-desktop"
 import BookableFilters from "./bookable-filters"
 import { cn } from "@/lib/utils"
+import SearchBarMobile from "./search-bar-mobile"
 
-const Header = ({ filterSheetSide = 'right' }: { filterSheetSide?: 'right' | 'bottom' }) => {
+const Header = ({ filterSheetSide = 'right', showFilters = true }: { filterSheetSide?: 'right' | 'bottom', showFilters?: boolean }) => {
     const { theme } = useTheme()
     const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark")
     const [animateSearch, setAnimateSearch] = useState(false)
@@ -96,8 +97,8 @@ const Header = ({ filterSheetSide = 'right' }: { filterSheetSide?: 'right' | 'bo
         : "/images/logo-black.svg"
 
     return (
-        <header className={cn("sticky top-0 z-50 transition-all duration-200 ease-in-out bg-background h-48 border-b", animateSearch && "h-22")}>
-            <div className="flex justify-between items-center p-4 xl:px-22 relative h-20">
+        <header className={cn("sticky top-0 z-50 transition-all duration-200 ease-in-out bg-background h-34 md:h-48 border-b", animateSearch && "h-18 md:h-22")}>
+            <div className={cn("flex justify-between items-center p-4 xl:px-22 relative h-20 transition-all duration-200 ease-in-out opacity-100 scale-y-100 origin-top", animateSearch && "opacity-0 scale-y-0 md:opacity-100 md:scale-y-100")}>
                 <Link to="/">
                     <img className="h-8 lg:h-9" src={logoSrc} alt="OneClick Stays" />
                 </Link>
@@ -277,10 +278,11 @@ const Header = ({ filterSheetSide = 'right' }: { filterSheetSide?: 'right' | 'bo
                     </NavigationMenuList>
                 </NavigationMenu>
             </div>
-            <div className={cn("py-4 flex justify-center items-center gap-2 absolute top-20 left-1/2 -translate-x-1/2 transition-all duration-200 ease-in-out", animateSearch && "top-0")}>
-                <SearchBar shrink={animateSearch} className={cn("-mr-22", animateSearch && "mr-0")} onOpen={() => setAnimateSearch(false)} onClose={() => setAnimateSearch(true)} />
+            <div className={cn("py-4 flex justify-center items-center gap-2 absolute top-16 md:top-20 left-1/2 -translate-x-1/2 transition-all duration-200 ease-in-out", animateSearch && "top-0 md:top-0")}>
+                <SearchBarDesktop shrink={animateSearch} className={cn("-mr-22", animateSearch && "mr-0")} onOpen={() => setAnimateSearch(false)} onClose={() => setAnimateSearch(true)} />
+                <SearchBarMobile shrink={showFilters} />
                 {/* {animateSearch && <BookableFilters side={filterSheetSide} />} */}
-                <BookableFilters side={filterSheetSide} triggerClassName={cn("opacity-0 scale-0", animateSearch && "opacity-100 scale-100")} />
+                <BookableFilters side={filterSheetSide} triggerClassName={cn("md:opacity-0 md:scale-0", animateSearch && "md:opacity-100 md:scale-100")} />
             </div>
         </header>
     )
