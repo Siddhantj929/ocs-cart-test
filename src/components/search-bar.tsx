@@ -57,7 +57,7 @@ const SearchSection = memo(
                                 active && 'bg-transparent dark:hover:bg-transparent hover:bg-transparent',
                                 className,
                                 shrink && breakpoint !== 'xsPlus' && 'w-24 md:w-40 md:h-12 md:p-4',
-                                shrink && breakpoint === 'xsPlus' && 'w-26',
+                                shrink && breakpoint === 'xsPlus' && 'w-28',
                             )}
                             onClick={onClick}
                         >
@@ -203,11 +203,11 @@ const SearchBar = ({
             <div
                 key="animated-background"
                 style={{
-                    transform: `translateX(${activeSection === 'location' ? '0' : activeSection === 'dates' ? isWindowMdPlus ? '16rem' : breakpoint === 'xsPlus' ? '6.5rem' : '6rem' : activeSection === 'guests' ? isWindowMdPlus ? '32rem' : breakpoint === 'xsPlus' ? '13rem' : '12rem' : '0'})`,
+                    transform: `translateX(${activeSection === 'location' ? '0' : activeSection === 'dates' ? isWindowMdPlus ? '16rem' : breakpoint === 'xsPlus' ? '7rem' : '6rem' : activeSection === 'guests' ? isWindowMdPlus ? '32rem' : breakpoint === 'xsPlus' ? '14rem' : '12rem' : '0'})`,
                 }}
                 className={cn(
                     'w-24 h-10 md:w-64 md:h-16 rounded-full bg-background dark:bg-muted absolute top-0 left-0 origin-center scale-0 opacity-0 z-0 transition-[transform,scale,opacity] duration-300 ease-in-out',
-                    breakpoint === 'xsPlus' && "w-26",
+                    breakpoint === 'xsPlus' && "w-28",
                     isSearchBarActive && 'scale-100 opacity-100',
                 )}
             />
@@ -309,10 +309,10 @@ const SearchBar = ({
             </SearchSection>
             <Button
                 className={cn(
-                    'h-10 w-10 md:h-13 md:w-13 rounded-full absolute right-2 z-20 cursor-pointer transition-all duration-200 ease-in-out opacity-100 scale-100',
+                    'h-10.5 w-10.5 md:h-13 md:w-13 rounded-full absolute right-2 z-20 cursor-pointer transition-all duration-200 ease-in-out opacity-100 scale-100',
                     isSearchBarActive && 'md:w-24',
-                    shrink && 'md:h-11 md:w-11 -right-12 md:right-0.5',
-                    hideSearchButton && "opacity-0 scale-0"
+                    shrink && 'md:h-11 md:w-11 -right-12.5 md:right-0.5',
+                    hideSearchButton && !isSearchBarActive && "opacity-0 scale-0"
                 )}
                 size="icon-lg"
             >

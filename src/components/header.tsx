@@ -289,8 +289,8 @@ const Header = ({ filterSheetSide = 'right', showFilters = true }: { filterSheet
                 </NavigationMenu>
             </div>
             <div className={cn("w-full py-4 flex justify-center items-center gap-2 absolute top-16 md:top-20 left-1/2 -translate-x-1/2 transition-all duration-200 ease-in-out", animateSearch && "-top-1.5 md:top-0")}>
-                <SearchBar shrink={animateSearch || !isWindowMdPlus} hideSearchButton={animateSearch && !isWindowMdPlus} className={cn("-mr-22", (animateSearch || !isWindowMdPlus) && "mr-0")} onOpen={() => setAnimateSearch(false)} onClose={() => setAnimateSearch(true)} />
-                <BookableFilters side={filterSheetSide} triggerClassName={cn("opacity-0 scale-0", animateSearch && "opacity-100 scale-100")} />
+                <SearchBar shrink={animateSearch || !isWindowMdPlus} hideSearchButton={(animateSearch || isWindowAtTop.current) && !isWindowMdPlus} className={cn("-mr-22", (animateSearch || !isWindowMdPlus) && "mr-0")} onOpen={() => setAnimateSearch(false)} onClose={() => setAnimateSearch(true)} />
+                <BookableFilters side={filterSheetSide} triggerClassName={cn("opacity-0 scale-0", (animateSearch || (isWindowAtTop.current && !isWindowMdPlus)) && "opacity-100 scale-100")} />
             </div>
         </header>
     )
