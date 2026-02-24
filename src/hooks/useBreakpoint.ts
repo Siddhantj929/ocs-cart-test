@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+export type Breakpoint = 'xs' | 'xsPlus' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 const useBreakpoint = () => {
     const [breakpoint, setBreakpoint] = useState<Breakpoint>('xs');
@@ -23,6 +23,8 @@ const useBreakpoint = () => {
                 setBreakpoint('md');
             } else if (width >= 640) {
                 setBreakpoint('sm');
+            } else if (width >= 400) {
+                setBreakpoint('xsPlus');
             } else {
                 setBreakpoint('xs');
             }

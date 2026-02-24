@@ -29,6 +29,7 @@ function useNumColumns() {
   const numColumns = useMemo(() => {
     switch (breakpoint) {
       case 'xs':
+      case 'xsPlus':
         return 1
       case 'sm':
         return 2
